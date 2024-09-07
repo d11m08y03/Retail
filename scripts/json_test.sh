@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+if [ "$#" -lt 1 ]; then
+  echo "Usage: ./$0 option[build | run]"
+  exit 1
+fi
+
+case "$1" in
+  build)
+    echo "Building json.c test."
+    gcc src/json.c tests/json_test.c -o bin -Iexternal/criterion-2.4.2/include/ -Lexternal/criterion-2.4.2/lib/ -lcriterion -o build/json_test
+    ;;
+  run)
+    echo "Running json.c test."
+    export LD_LIBRARY_PATH=./external/criterion-2.4.2/lib/:$LD_LIBRARY_PATH && ./build/json_test
+    ;;
+  *)
+    echo "Invalid argument: $1"
+    echo "Usage: ./$0 option[build | run]"
+    exit 1
+    ;;
+esac
