@@ -9,7 +9,7 @@ fi
 
 case "$1" in
   build)
-    gcc src/json.c tests/json_test.c -o bin -Iexternal/criterion-2.4.2/include/ -Lexternal/criterion-2.4.2/lib/ -lcriterion -o build/json_test
+    gcc src/json.c tests/json_test.c -o bin -Iexternal/criterion-2.4.2/include/ -Lexternal/criterion-2.4.2/lib/ -lcriterion -Wall -Wextra -Wpedantic -Werror -o build/json_test 
     echo "Built json_test."
     ;;
   run)

@@ -8,8 +8,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define PORT 6961
-#define BUFFER_SIZE 2048
+#include "globals.h"
+#include "handlers.h"
 
 static int server_socket = 0;
 
@@ -26,13 +26,11 @@ void handle_sigint(int sig) {
   exit(EXIT_SUCCESS);
 }
 
-void handle_request(int client_socket) {
+void handle_requests(int client_socket) {
   char buffer[BUFFER_SIZE] = {0};
   int bytes_read;
-  const char *response_header =
-      "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ";
   char response_body[BUFFER_SIZE] = {0};
-  char response[BUFFER_SIZE] = {0};
+  char response[BUFFER_SIZE * 2] = {0};
 
   // Read the request
   bytes_read = read(client_socket, buffer, sizeof(buffer) - 1);
@@ -47,18 +45,25 @@ void handle_request(int client_socket) {
   char method[BUFFER_SIZE], path[BUFFER_SIZE], protocol[BUFFER_SIZE];
   sscanf(buffer, "%s %s %s", method, path, protocol);
 
+  char *json_string;
+  char *response_header;
+
+  // Handler URL paths
   if (strcmp(path, "/") == 0) {
-    snprintf(
-        response_body, sizeof(response_body), "{\"message\": \"Hello World\"}");
-  } else if (strcmp(path, "/balls") == 0) {
-    snprintf(
-        response_body, sizeof(response_body), "{\"message\": \"Hello Balls\"}");
+    json_string = handle_root();
+    response_header = HTTP_OK_RESPONSE_HEADER;
+  } else if (strcmp(path, "/create_user") == 0) {
+    json_string = handle_create_user();
+    response_header = HTTP_CREATED_RESPONSE_HEADER;
+  } else if (strcmp(path, "/login_user") == 0) {
+    json_string = handle_login_user();
+    response_header = HTTP_OK_RESPONSE_HEADER;
   } else {
-    snprintf(
-        response_body,
-        sizeof(response_body),
-        "{\"error\": \"Route not found\"}");
+    json_string = "{\"error\": \"Route not found\"}";
+    response_header = HTTP_NOT_FOUND_RESPONSE_HEADER;
   }
+
+  snprintf(response_body, sizeof(response_body), "%s", json_string);
 
   // Prepare response
   snprintf(
@@ -76,7 +81,7 @@ void handle_request(int client_socket) {
 }
 
 int main(void) {
-  // Signaction when server is stopped
+  // Sigaction when server is stopped
   struct sigaction sa;
   sa.sa_handler = handle_sigint;
   sa.sa_flags = 0;
@@ -135,7 +140,7 @@ int main(void) {
       exit(EXIT_FAILURE);
     }
 
-    handle_request(client_socket);
+    handle_requests(client_socket);
   }
 
   return EXIT_SUCCESS;
