@@ -17,7 +17,7 @@ void handle_sigint(int sig) {
   printf("\nCaught signal %d (SIGINT). Performing cleanup...\n", sig);
 
   if (close(server_socket) < 0) {
-    puts("Error closing client socket");
+    puts("Error closing client socket.");
     exit(EXIT_FAILURE);
   }
 
@@ -35,7 +35,7 @@ void handle_requests(int client_socket) {
   // Read the request
   bytes_read = read(client_socket, buffer, sizeof(buffer) - 1);
   if (bytes_read < 0) {
-    perror("read");
+    perror("Read.");
     close(client_socket);
     return;
   }
@@ -48,7 +48,7 @@ void handle_requests(int client_socket) {
   char *json_string;
   char *response_header;
 
-  // Handler URL paths
+  // Handle URL paths
   if (strcmp(path, "/") == 0) {
     json_string = handle_root();
     response_header = HTTP_OK_RESPONSE_HEADER;
@@ -88,7 +88,7 @@ int main(void) {
   sigemptyset(&sa.sa_mask);
 
   if (sigaction(SIGINT, &sa, NULL) == -1) {
-    perror("Unable to set up signal handler");
+    perror("Unable to set up signal handler.");
     exit(EXIT_FAILURE);
   }
 
@@ -98,14 +98,14 @@ int main(void) {
 
   server_socket = socket(AF_INET, SOCK_STREAM, 0);
   if (server_socket < 0) {
-    perror("Socket");
+    perror("Socket.");
     exit(EXIT_FAILURE);
   }
 
-  // Set SO_REUSEADDR to allow reuse of address
+  // Set SO_REUSEADDR to allow reuse of address and port
   int opt = 1;
   if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) {
-    perror("setsockopt");
+    perror("Setsockopt.");
     close(server_socket);
     exit(EXIT_FAILURE);
   }
@@ -117,14 +117,14 @@ int main(void) {
   int bind_result =
       bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
   if (bind_result < 0) {
-    perror("Bind");
+    perror("Bind.");
     close(server_socket);
     exit(EXIT_FAILURE);
   }
 
   // Listen for incoming connections
   if (listen(server_socket, 10) < 0) {
-    perror("Listen");
+    perror("Listen.");
     close(server_socket);
     exit(EXIT_FAILURE);
   }
@@ -135,7 +135,7 @@ int main(void) {
     client_socket = accept(
         server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
     if (client_socket < 0) {
-      perror("accept failed");
+      perror("Accept failed.");
       close(server_socket);
       exit(EXIT_FAILURE);
     }
