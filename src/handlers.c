@@ -1,9 +1,5 @@
-#include <stdio.h>
-
 #include "handlers.h"
 #include "json.h"
-
-#define BUFFER_SIZE 2048
 
 char *handle_root(void) {
   json_object_t *obj = json_init_object();

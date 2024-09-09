@@ -1,5 +1,5 @@
-#ifndef HANDLER_H
-#define HANDLER_H
+#ifndef HANDLERS_H
+#define HANDLERS_H
 
 char *handle_root(void);
 char *handle_create_user(void);
