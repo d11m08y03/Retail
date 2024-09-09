@@ -50,7 +50,7 @@ void handle_requests(int client_socket) {
 
   // Handle URL paths
   if (strcmp(path, "/") == 0) {
-    json_string = handle_root();
+    json_string = handle_root(buffer);
     response_header = HTTP_OK_RESPONSE_HEADER;
   } else if (strcmp(path, "/create_user") == 0) {
     json_string = handle_create_user();

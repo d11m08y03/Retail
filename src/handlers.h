@@ -1,8 +1,8 @@
 #ifndef HANDLERS_H
 #define HANDLERS_H
 
-char *handle_root(void);
-char *handle_create_user(void);
-char *handle_login_user(void);
+char *handle_root(const char* body);
+char *handle_create_user(const char* body);
+char *handle_login_user(const char* body);
 
-#endif // !HANDLER_H
+#endif // !HANDLERS_H
