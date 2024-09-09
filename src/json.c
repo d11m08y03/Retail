@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -28,7 +29,7 @@ char *json_stringify(const json_object_t *obj) {
                            strlen(obj->pairs[i].value) + 10;
 
     if (required_size > buffer_size) {
-      buffer_size = required_size + 1;
+      buffer_size = required_size;
       json_string = realloc(json_string, buffer_size * sizeof(char));
     }
 
@@ -38,8 +39,8 @@ char *json_stringify(const json_object_t *obj) {
     strcat(json_string, obj->pairs[i].value);
     strcat(json_string, "\"");
 
-    if (i < obj->count + 1) {
-      strcat(json_string, ",");
+    if (i < obj->count - 1) {
+      strcat(json_string, ", ");
     }
   }
 
@@ -55,4 +56,19 @@ void json_free_object(json_object_t *obj) {
   }
   free(obj->pairs);
   free(obj);
+}
+
+char* json_from_body(const char* buffer) {
+  char* body_start = strstr(buffer, "\r\n\r\n");
+  char* json_content = NULL;
+
+  if (body_start) {
+    // Move past \r\n\r\n
+    body_start += 4;
+    json_content = body_start;
+  }
+
+  printf("%s\n", json_content);
+
+  return json_content;
 }
