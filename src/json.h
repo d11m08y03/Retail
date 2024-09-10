@@ -19,5 +19,6 @@ void json_add_pair(json_object_t *obj, const char *key, const char *value);
 char *json_stringify(const json_object_t *obj);
 void json_free_object(json_object_t *obj);
 char *json_from_body(const char *buffer);
+json_object_t *json_from_string(const char *json_string);
 
 #endif // !JSON_H

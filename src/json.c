@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,9 +59,9 @@ void json_free_object(json_object_t *obj) {
   free(obj);
 }
 
-char* json_from_body(const char* buffer) {
-  char* body_start = strstr(buffer, "\r\n\r\n");
-  char* json_content = NULL;
+char *json_from_body(const char *buffer) {
+  char *body_start = strstr(buffer, "\r\n\r\n");
+  char *json_content = NULL;
 
   if (body_start) {
     // Move past \r\n\r\n
@@ -71,4 +72,97 @@ char* json_from_body(const char* buffer) {
   printf("%s\n", json_content);
 
   return json_content;
+}
+
+static char *trim_whitespace(char *str) {
+  char *end;
+
+  while (isspace((unsigned char)*str))
+    str++;
+
+  if (*str == 0)
+    return str;
+
+  end = str + strlen(str) - 1;
+  while (end > str && isspace((unsigned char)*end))
+    end--;
+
+  *(end + 1) = '\0';
+
+  return str;
+}
+
+json_object_t *json_from_string(const char *json_string) {
+  if (json_string == NULL || *json_string != '{')
+    return NULL;
+
+  json_object_t *obj = malloc(sizeof(json_object_t));
+  if (!obj)
+    return NULL;
+  obj->count = 0;
+  obj->pairs = NULL;
+
+  char *json_copy = strdup(json_string);
+  if (!json_copy) {
+    free(obj);
+    return NULL;
+  }
+
+  json_copy++;
+  char *end = strchr(json_copy, '}');
+  if (!end) {
+    free(json_copy - 1);
+    free(obj);
+    return NULL;
+  }
+  *end = '\0';
+
+  char *token = strtok(json_copy, ",");
+  while (token != NULL) {
+    char *colon = strchr(token, ':');
+    if (!colon) {
+      free(json_copy - 1);
+      free(obj->pairs);
+      free(obj);
+      return NULL;
+    }
+
+    *colon = '\0';
+    char *key = trim_whitespace(token);
+    char *value = trim_whitespace(colon + 1);
+
+    if (*key == '"' && key[strlen(key) - 1] == '"') {
+      key++;
+      key[strlen(key) - 1] = '\0';
+    }
+    if (*value == '"' && value[strlen(value) - 1] == '"') {
+      value++;
+      value[strlen(value) - 1] = '\0';
+    }
+
+    json_pair_t *new_pairs =
+        realloc(obj->pairs, (obj->count + 1) * sizeof(json_pair_t));
+    if (!new_pairs) {
+      free(json_copy - 1);
+      free(obj->pairs);
+      free(obj);
+      return NULL;
+    }
+    obj->pairs = new_pairs;
+
+    obj->pairs[obj->count].key = strdup(key);
+    obj->pairs[obj->count].value = strdup(value);
+    if (!obj->pairs[obj->count].key || !obj->pairs[obj->count].value) {
+      free(json_copy - 1);
+      free(obj->pairs);
+      free(obj);
+      return NULL;
+    }
+
+    obj->count++;
+    token = strtok(NULL, ",");
+  }
+
+  free(json_copy - 1);
+  return obj;
 }
