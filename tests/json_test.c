@@ -1,5 +1,6 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
+#include <stdio.h>
 
 #include "../external/criterion-2.4.2/include/criterion/criterion.h"
 #include "../src/json.h"

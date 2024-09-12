@@ -135,6 +135,7 @@ json_object_t *json_from_string(const char *json_string) {
       key++;
       key[strlen(key) - 1] = '\0';
     }
+
     if (*value == '"' && value[strlen(value) - 1] == '"') {
       value++;
       value[strlen(value) - 1] = '\0';
