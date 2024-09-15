@@ -9,12 +9,12 @@ fi
 
 case "$1" in
   build)
-    gcc server/json.c tests/json_test.c -Iexternal/criterion-2.4.2/include/ -Lexternal/criterion-2.4.2/lib/ -lcriterion -lcurl -o build/json_test 
+    gcc migrations/migrations.c -Wall -Wextra -Wpedantic -Werror -o build/migrations
     echo "Built json_test."
     ;;
   run)
     echo "Running json_test."
-    export LD_LIBRARY_PATH=./external/criterion-2.4.2/lib/:$LD_LIBRARY_PATH && ./build/json_test
+    ./build/migrations
     ;;
   *)
     echo "Invalid argument: $1"

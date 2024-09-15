@@ -9,7 +9,7 @@ fi
 
 case "$1" in
   build)
-    gcc src/server.c src/handlers.c src/json.c -Wall -Wextra -Wpedantic -Werror -o build/server
+    gcc server/server.c server/handlers.c server/json.c server/db.c -Wall -Wextra -Wpedantic -Werror -o build/server
     echo "Built server."
     ;;
   run)
