@@ -10,10 +10,9 @@
 
 #include "globals.h"
 #include "handlers.h"
+#include "server.h"
 
-static int server_socket = 0;
-
-void handle_sigint(int sig) {
+static void handle_sigint(int sig) {
   printf("\nCaught signal %d (SIGINT). Performing cleanup...\n", sig);
 
   if (close(server_socket) < 0) {
@@ -26,7 +25,7 @@ void handle_sigint(int sig) {
   exit(EXIT_SUCCESS);
 }
 
-void handle_requests(int client_socket) {
+static void handle_requests(int client_socket) {
   char buffer[BUFFER_SIZE] = {0};
   int bytes_read;
   char response_body[BUFFER_SIZE] = {0};
@@ -80,7 +79,7 @@ void handle_requests(int client_socket) {
   close(client_socket);
 }
 
-int main(void) {
+int server_start(void) {
   // Sigaction when server is stopped
   struct sigaction sa;
   sa.sa_handler = handle_sigint;
