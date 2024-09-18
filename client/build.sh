@@ -1,3 +1,3 @@
-gcc main.c navbar.c -Lexternal -lraygui -lraylib -o bin
+gcc main.c navbar.c -L./extern/ -lraygui -lraylib -Iextern -o bin
 
-export LD_LIBRARY_PATH=./external/:$LD_LIBRARY_PATH && ./bin
+export LD_LIBRARY_PATH=./extern/:$LD_LIBRARY_PATH && ./bin
