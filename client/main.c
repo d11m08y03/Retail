@@ -2,11 +2,11 @@
 #include <stdlib.h>
 
 #include "config.h"
-#include "navbar.h"
+#include "components/navbar.h"
 #include "raygui.h"
 
 int main(void) {
-  SetConfigFlags(FLAG_WINDOW_UNDECORATED);
+  //SetConfigFlags(FLAG_WINDOW_UNDECORATED);
   InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME);
   SetTargetFPS(60);
 
