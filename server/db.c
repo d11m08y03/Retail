@@ -20,5 +20,3 @@ int db_init(void) {
 void db_destroy() {
   sqlite3_close(db);
 }
-
-
