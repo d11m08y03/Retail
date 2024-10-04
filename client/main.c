@@ -12,7 +12,6 @@
 #include "pages/products.h"
 
 int main(void) {
-  SetConfigFlags(FLAG_WINDOW_UNDECORATED);
   InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME);
   SetTargetFPS(60);
 

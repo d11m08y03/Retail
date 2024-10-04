@@ -1,52 +1,40 @@
+#include <raylib.h>
 #include <stdlib.h>
 
+#include "components/navbar.h"
 #include "config.h"
-#include "navbar.h"
-#include "raygui.h"
+#include "extern/raygui.h"
+#include "pages/home.h"
+#include "pages/pages.h"
+#include "pages/products.h"
 
-#define TAB_COUNT 2
-#define TAB_WIDTH 125
-#define TAB_HEIGHT 42
-#define TAB_SPACING 10
+int main(void) {
+  SetConfigFlags(FLAG_WINDOW_UNDECORATED);
+  InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME);
+  SetTargetFPS(60);
 
-static const char *tabs_left[] = {"Home", "Products"};
-static const char *tabs_right[] = {"About", "Contact"};
-static const char *title = "Shopaholic";
-static int current_tab = 0;
+  while (!WindowShouldClose()) {
+    BeginDrawing();
 
-void navbar_display() {
+    ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
 
-  // Left navbar items
-  for (size_t i = 0; i < TAB_COUNT; i++) {
-    int tab_x = 10 + i * (TAB_WIDTH + TAB_SPACING);
-    int tab_y = 10;
-    if (GuiButton(
-            (Rectangle){tab_x, tab_y, TAB_WIDTH, TAB_HEIGHT}, tabs_left[i])) {
-      current_tab = i;
+    int current_page = navbar_display();
+
+    switch (current_page) {
+    case PAGES_HOME:
+      home_page_display();
+      break;
+    case PAGE_PRODUCTS:
+      products_page_display();
+      break;
+    default:
+      break;
     }
+
+    EndDrawing();
   }
 
-  // Title in the middle
-  DrawText(
-      title, (WINDOW_WIDTH / 2) - MeasureText(title, 35) / 2, 15, 35, BLACK);
+  CloseWindow();
 
-  // Right navbar items
-  for (size_t i = 0; i < TAB_COUNT; i++) {
-    int tab_x = WINDOW_WIDTH - ((i + 1) * (TAB_WIDTH + TAB_SPACING));
-    int tab_y = 10;
-    if (GuiButton(
-            (Rectangle){tab_x, tab_y, TAB_WIDTH, TAB_HEIGHT}, tabs_right[i])) {
-      current_tab = i + 2;
-    }
-  }
-
-  if (current_tab == 0) {
-    DrawText("Welcome to Home", 200, 70, 20, GRAY);
-  } else if (current_tab == 1) {
-    DrawText("Product List", 200, 70, 20, GRAY);
-  } else if (current_tab == 2) {
-    DrawText("About Us", 200, 70, 20, GRAY);
-  } else if (current_tab == 3) {
-    DrawText("Contact Information", 200, 70, 20, GRAY);
-  }
+  return EXIT_SUCCESS;
 }
