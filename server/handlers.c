@@ -18,3 +18,9 @@ char *handle_login_user(const char *body) {
 
   return json_string;
 }
+
+char *handle_create_product(const char *body) {
+  char *json_string = json_from_body(body);
+
+  return "";
+}
