@@ -1,4 +1,14 @@
-This project aims to achieve a comprehensive online retail shop system in C. It focuses on creating functionalities for product catalog management, order processing, and customer feedback integration. The system is designed to efficiently handle real-time transactions, manage product categories, track inventory levels, and generate detailed sales reports, thereby improving both operational efficiency and the overall customer experience.
+**Project Overview**
+
+This project aims to develop a comprehensive online retail shop system in C, designed to provide a seamless shopping experience for customers while improving operational efficiency for the business. The system encompasses a range of functionalities, including:
+
+- **Product Catalog Management:** Efficiently manage a dynamic catalog of products, allowing for easy addition, modification, and removal of items while categorizing them for better user navigation.
+  
+- **Order Processing:** Streamlined order management processes that facilitate real-time transactions, ensuring that customer orders are processed quickly and accurately, from selection to payment.
+  
+- **Inventory Management:** Real-time tracking of inventory levels to prevent stockouts or overstock situations, ensuring that the right products are available for customers when needed.
+
+This system aims to enhance the overall customer experience by providing intuitive navigation and timely order fulfillment while equipping the business with the tools necessary to optimize operations and drive growth.
 
 # Scripts
 Bash scripts will be used to setup, build and run C code as many of the compile commands are fairly long.
