@@ -3,8 +3,6 @@
 #include "db.h"
 
 int db_init(void) {
-  char *err_message = 0;
-
   int rc = sqlite3_open("test.db", &db);
   if (rc != SQLITE_OK) {
     fprintf(stderr, "Cannot open databse: %s\n", sqlite3_errmsg(db));

@@ -9,8 +9,8 @@ fi
 
 case "$1" in
   build)
-    gcc migrations/migrations.c -Wall -Wextra -Wpedantic -Werror -o build/migrations
-    echo "Built json_test."
+    gcc migrations/migrations.c -Wall -Wextra -Wpedantic -Werror -o build/migrations -lsqlite3
+    echo "Built migrations."
     ;;
   run)
     echo "Running json_test."

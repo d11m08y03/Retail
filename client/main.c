@@ -1,10 +1,6 @@
 #include <raylib.h>
 #include <stdlib.h>
 
-// Tax 50
-// Me 33
-// Daby 31
-
 #include "components/navbar.h"
 #include "config.h"
 #include "extern/raygui.h"

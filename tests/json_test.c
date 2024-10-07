@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "../external/criterion-2.4.2/include/criterion/criterion.h"
-#include "../src/json.h"
+#include "../server/json.h"
 
 Test(json_init_object, basic) {
   json_object_t *obj = json_init_object();
