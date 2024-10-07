@@ -3,3 +3,4 @@ build
 app
 experimental
 bin
+*.db
