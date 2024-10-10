@@ -8,9 +8,12 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "db.h"
 #include "globals.h"
 #include "handlers.h"
 #include "server.h"
+
+static int server_socket = 0;
 
 static void handle_sigint(int sig) {
   printf("\nCaught signal %d (SIGINT). Performing cleanup...\n", sig);
@@ -21,6 +24,8 @@ static void handle_sigint(int sig) {
   }
 
   puts("Server closed successfully.");
+
+  db_destroy();
 
   exit(EXIT_SUCCESS);
 }
@@ -48,18 +53,36 @@ static void handle_requests(int client_socket) {
   char *response_header;
 
   // Handle URL paths
-  if (strcmp(path, "/") == 0) {
-    json_string = handle_root(buffer);
-    response_header = HTTP_OK_RESPONSE_HEADER;
-  } else if (strcmp(path, "/create_user") == 0) {
+  if (strcmp(path, "/api/create_user") == 0) {
     json_string = handle_create_user(buffer);
     response_header = HTTP_CREATED_RESPONSE_HEADER;
-  } else if (strcmp(path, "/login_user") == 0) {
-    json_string = handle_login_user(buffer);
-    response_header = HTTP_OK_RESPONSE_HEADER;
+
+    printf(
+        "[LOG | %s | %s] /api/create_user HIT. Payload: %s \n",
+        __func__,
+        __FILE__,
+        json_string);
+
+  } else if (strcmp(path, "/api/create_product") == 0) {
+    json_string = handle_create_product(buffer);
+    response_header = HTTP_CREATED_RESPONSE_HEADER;
+
+    printf(
+        "[LOG | %s | %s] /api/create_product HIT. Payload: %s \n",
+        __func__,
+        __FILE__,
+        json_string);
+
   } else {
     json_string = "{\"error\": \"Route not found\"}";
     response_header = HTTP_NOT_FOUND_RESPONSE_HEADER;
+
+    printf(
+        "[LOG | %s | %s] %s 404 HIT. Payload: %s \n",
+        __func__,
+        __FILE__,
+        path,
+        json_string);
   }
 
   snprintf(response_body, sizeof(response_body), "%s", json_string);
