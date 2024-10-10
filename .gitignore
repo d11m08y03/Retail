@@ -1,6 +1,5 @@
 external
 build
-app
 experimental
 bin
 *.db
