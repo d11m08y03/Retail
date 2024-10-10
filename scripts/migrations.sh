@@ -9,7 +9,7 @@ fi
 
 case "$1" in
   build)
-    gcc migrations/migrations.c -Wall -Wextra -Wpedantic -Werror -o build/migrations -lsqlite3
+    gcc migrations/migrations.c migrations/main.c -Wall -Wextra -Wpedantic -Werror -o build/migrations -lsqlite3
     echo "Built migrations."
     ;;
   run)

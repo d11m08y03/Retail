@@ -69,8 +69,6 @@ char *json_from_body(const char *buffer) {
     json_content = body_start;
   }
 
-  printf("%s\n", json_content);
-
   return json_content;
 }
 
@@ -166,4 +164,29 @@ json_object_t *json_from_string(const char *json_string) {
 
   free(json_copy - 1);
   return obj;
+}
+
+void json_print_object(const json_object_t *obj) {
+  printf("\n");
+  printf("{\n");
+  for (size_t i = 0; i < obj->count; i++) {
+    json_pair_t pair = obj->pairs[i];
+    printf("  \"%s\": \"%s\"", pair.key, pair.value);
+
+    if (i < obj->count - 1) {
+      printf(",");
+    }
+    printf("\n");
+  }
+  printf("}\n");
+  printf("\n");
+}
+
+char *json_get_value_by_key(const json_object_t *obj, const char *key) {
+  for (size_t i = 0; i < obj->count; i++) {
+    if (strcmp(obj->pairs[i].key, key) == 0) {
+      return obj->pairs[i].value;
+    }
+  }
+  return NULL;
 }
